@@ -37,22 +37,10 @@ export default function EventHero({ eventsData }) {
     }, [targetDate]);
 
     return (
-        <section className="relative w-full overflow-hidden">
+        <section className="relative w-full overflow-hidden  bg-[url('/ab/newHero.webp')] bg-cover bg-top-center">
             {/* <Header /> */}
-            <div
-                className="absolute inset-0 bg-cover bg-center"
-                style={{
-                    backgroundImage:
-                        "url('/banner-bg.svg')",
-                }}
-            />
-            {/* Dark overlay */}
-            <div className="absolute inset-0 "
-                style={{
-                    background: 'rgba(29, 31, 43, 0.50)',
-                }}
-            />
-
+           
+      
             <div className="relative mx-auto container pb-12 md:pb-20">
                 <div className="flex items-start justify-start mb-6 pt-3">
                     <Image
@@ -94,7 +82,7 @@ export default function EventHero({ eventsData }) {
                     <div className="flex items-center gap-4">
                         <div className="h-px flex-1 hidden md:block bg-white/20" />
                         <p className="text-center text-lg md:text-xl font-semibold tracking-wide px-5 text-white md:whitespace-nowrap whitespace-normal">
-                            Upcoming Speaker Reveal - Don&apos;t Miss Out
+                            Secure Your Spot Before It Begins - Don&apos;t Miss Out
                         </p>
                         <div className="h-px flex-1 hidden md:block bg-white/20" />
                     </div>
@@ -117,8 +105,7 @@ export default function EventHero({ eventsData }) {
                 </div>
             </div>
 
-            {/* Subtle vignette */}
-            <div className="pointer-events-none absolute inset-0 shadow-[inset_0_-140px_220px_rgba(0,0,0,0.65)]" />
+       
         </section>
     );
 }
