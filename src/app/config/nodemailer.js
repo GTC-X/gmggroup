@@ -39,5 +39,5 @@ export const mailgunClient = mg.client({
 export const MAILGUN_DOMAIN = "mx5.gtcmail.com" || "mx5.gtcmail.com";
 
 export const MAILGUN_FROM =
-  "GTCFX <portal@mx5.gtcmail.com>" || `GTCFX <postmaster@${MAILGUN_DOMAIN}>`;    
+  "GMG Markets <portal@mx5.gtcmail.com>" || `GMG Markets <postmaster@${MAILGUN_DOMAIN}>`;    
 
