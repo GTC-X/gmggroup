@@ -10,7 +10,7 @@ import LegalFooterSection from "./components/LegalFooterSection";
 export default function GTCRegisterWithDesign() {
   return (
     <>
-      <Meta title="Spread Betting with FCA Broker GMG" description="Trade tax-free* spread betting with GMG. FCA-regulated, fast execution, and low barriers to entry. (*Tax treatment depends on your circumstances.)" />
+      <Meta title="Spread Betting with FCA Broker GMGmarkets" description="Trade tax-free* spread betting with GMGmarkets. FCA-regulated, fast execution, and low barriers to entry. (*Tax treatment depends on your circumstances.)" />
       <div className="min-h-screen bg-[#0F143A] text-white">
         {/* Top Bar */}
         <NewBanner />

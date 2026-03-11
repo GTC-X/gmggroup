@@ -45,7 +45,7 @@ export default function EventHero({ eventsData }) {
                 <div className="flex items-start justify-start mb-6 pt-3">
                     <Image
                         src="/logo-white.png"
-                        alt="GMG Logo"
+                        alt="GMGmarkets"
                         width={200}
                         height={72}
                         className="object-contain w-[150px] h-[54px] md:w-[250px] md:h-[90px]"
@@ -61,7 +61,7 @@ export default function EventHero({ eventsData }) {
                         </h2>
 
                         <p className="mt-6 text-center md:text-left text-[14px] leading-[1.55] text-white md:text-[20px]">
-                            At GMG, we give UK and Northern Ireland traders the edge. FCA regulation, tax benefits, and fast execution combine to make spread betting a smarter way to trade global markets. Whether markets rise or fall, you can take your shot, with as little as 10p per point.
+                            At GMGmarkets, we give UK and Northern Ireland traders the edge. FCA regulation, tax benefits, and fast execution combine to make spread betting a smarter way to trade global markets. Whether markets rise or fall, you can take your shot, with as little as 10p per point.
                         </p>
 
                         </div>

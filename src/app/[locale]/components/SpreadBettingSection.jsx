@@ -12,7 +12,7 @@ const features = [
   },
   {
     title: "Tax-Free Potential*",
-    text: "You don’t need huge capital to get started. With trades from just 10p per point and leverage up to 1:30 for retail clients, GMG makes global markets accessible to every trader.",
+    text: "You don’t need huge capital to get started. With trades from just 10p per point and leverage up to 1:30 for retail clients, GMGmarkets makes global markets accessible to every trader.",
     image: "/img2.png",
   },
   {
@@ -23,7 +23,7 @@ const features = [
   },
   {
     title: "Regulated & Reliable",
-    text: "Trade with the confidence that comes from FCA oversight. GMG delivers fast execution, secure systems, and a regulated environment designed to protect you every step of the way.",
+    text: "Trade with the confidence that comes from FCA oversight. GMGmarkets delivers fast execution, secure systems, and a regulated environment designed to protect you every step of the way.",
     image: "/img4.png",
 
   },
@@ -60,13 +60,13 @@ function FeatureCard({ title, text, image }) {
   );
 }
 
-export default function GMGSpreadBettingSection() {
+export default function GMGmarketsSpreadBettingSection() {
   return (
     <section className="w-full bg-[#fff] md:py-14 py-8">
       <div className="max-w-7xl mx-auto px-4">
-        <div className="mx-auto text-center max-w-xl">
+        <div className="mx-auto text-center max-w-3xl">
           <h2 className="text-[24px] font-extrabold leading-[1.2] tracking-[-0.02em] text-[#000000] md:text-[36px]">
-            Why Traders Choose GMG for Spread Betting
+            Why Traders Choose GMGmarkets for Spread Betting
           </h2>
           <p className="mt-4 text-[16px] font-normal leading-[1.2] text-[#8D9099] md:text-[18px]">
             The Smarter Way to Spread Bet in the UK

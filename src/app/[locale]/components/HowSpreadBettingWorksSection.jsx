@@ -121,7 +121,7 @@ export default function HowSpreadBettingWorksSection() {
         {/* Bottom copy */}
         <div className="mt-8 md:mt-9 text-center max-w-3xl mx-auto">
           <p className="text-[14px] md:text-[16px] font-normal leading-[1.6] text-[#215C9E]">
-            Spread betting with GMG gives you flexibility, speed, and FCA
+            Spread betting with GMGmarkets gives you flexibility, speed, and FCA
             oversight, which makes it one of the most attractive ways to trade
             in the UK.
           </p>
