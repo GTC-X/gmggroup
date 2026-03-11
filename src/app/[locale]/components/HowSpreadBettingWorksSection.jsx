@@ -87,30 +87,33 @@ export default function HowSpreadBettingWorksSection() {
         </div>
 
         {/* Steps row */}
-        <div className="mt-8 md:mt-14 grid md:grid-cols-5 grid-cols-2 justify-center gap-y-4 md:gap-y-4 gap-x-6 md:gap-x-8">
-          {steps.map((step, index) => (
-            <div
-              key={step.title}
-              className="flex w-full flex-col items-center text-center"
-            >
-              {/* Icon circle */}
-              <div className="flex h-[110px] w-[110px] items-center justify-center rounded-full bg-[#1f4fa32b]">
-                <div className="flex h-[90px] w-[90px] items-center justify-center rounded-full border-2 border-white/80 bg-[#1f4fa3]">
-                  <span className=" h-12  w-12 font-bold text-white">
-                    {step.icon}
-                  </span>
-                </div>
-              </div>
-
-              <h3 className="mt-3 md:mt-5 text-[14px] md:text-[18px] font-medium tracking-[-0.01em] text-[#000]">
-                {step.title}
-              </h3>
-              <p className="md:mt-2 mt-1 text-[12px] md:text-[15px] leading-[1.3] font-normal text-[#4B4B4B]">
-                {step.text}
-              </p>
-            </div>
-          ))}
+       <div className="mt-8 md:mt-14 grid md:grid-cols-5 grid-cols-2 justify-center gap-y-4 md:gap-y-4 gap-x-6 md:gap-x-8">
+  {steps.map((step, index) => (
+    <div
+      key={step.title}
+      className={`flex w-full flex-col items-center text-center ${
+        index === steps.length - 1 ? "hidden md:flex" : ""
+      }`}
+    >
+      {/* Icon circle */}
+      <div className="flex h-[110px] w-[110px] items-center justify-center rounded-full bg-[#1f4fa32b]">
+        <div className="flex h-[90px] w-[90px] items-center justify-center rounded-full border-2 border-white/80 bg-[#1f4fa3]">
+          <span className="h-12 w-12 font-bold text-white">
+            {step.icon}
+          </span>
         </div>
+      </div>
+
+      <h3 className="mt-3 md:mt-5 text-[14px] md:text-[18px] font-medium tracking-[-0.01em] text-[#000]">
+        {step.title}
+      </h3>
+
+      <p className="md:mt-2 mt-1 text-[12px] md:text-[15px] leading-[1.3] font-normal text-[#4B4B4B]">
+        {step.text}
+      </p>
+    </div>
+  ))}
+</div>
 
         {/* Divider line */}
         <div className="mt-10 md:mt-12 border-t border-[#e5e7eb]" />
@@ -133,131 +136,3 @@ export default function HowSpreadBettingWorksSection() {
   );
 }
 
-
-
-// "use client";
-
-// import React from "react";
-// import {
-//   BarChart3,
-//   CircleDollarSign,
-//   Shield,
-//   Waves,
-//   Landmark,
-// } from "lucide-react";
-
-// const steps = [
-//   {
-//     title: "Choose Your Market",
-//     description:
-//       "From forex to indices to commodities, decide where you want to trade.",
-//     icon: BarChart3,
-//   },
-//   {
-//     title: "Pick Long or Short",
-//     description:
-//       "Think prices will rise? Go long. Expect them to fall? Go short. The decision is entirely yours.",
-//     icon: CircleDollarSign,
-//   },
-//   {
-//     title: "Stake Per Point",
-//     description:
-//       "Set your risk from as little as 10p per point, keeping control of your exposure.",
-//     icon: Shield,
-//   },
-//   {
-//     title: "Leverage",
-//     description:
-//       "Control larger positions with a smaller deposit (up to 1:30 leverage for retail traders). But remember: leverage carries risk.",
-//     icon: Waves,
-//   },
-//   {
-//     title: "Tax Efficiency",
-//     description:
-//       "No stamp duty. No capital gains tax. More potential profit in your pocket.",
-//     icon: Landmark,
-//   },
-// ];
-
-// function StepCard({ icon: Icon, title, description }) {
-//   return (
-//     <div className="flex w-full max-w-[190px] flex-col items-center text-center">
-//       <div className="flex h-[76px] w-[76px] items-center justify-center rounded-full bg-[#2E66B0] ring-[7px] ring-[#CCD8E7]">
-//         <Icon
-//           className="h-[32px] w-[32px] text-white"
-//           strokeWidth={1.8}
-//         />
-//       </div>
-
-//       <h3 className="mt-[22px] text-[16px] font-semibold leading-[1.2] tracking-[-0.02em] text-[#111111]">
-//         {title}
-//       </h3>
-
-//       <p className="mt-[8px] text-[13px] leading-[1.08] text-[#666666]">
-//         {description}
-//       </p>
-//     </div>
-//   );
-// }
-
-// export default function SpreadBettingWorksSection() {
-//   return (
-//     <section className="w-full bg-[#F3F3F3] py-[62px]">
-//       <div className="mx-auto max-w-[1040px] px-6">
-//         {/* Top content */}
-//         <div className="mx-auto max-w-[640px] text-center">
-//           <p className="text-[15px] font-medium leading-none text-[#2E66B0]">
-//             The Smarter Way to Trade Global Markets
-//           </p>
-
-//           <h2 className="mt-[18px] text-[24px] font-bold leading-[1.1] tracking-[-0.02em] text-[#050505] md:text-[26px]">
-//             How Does Spread Betting Work?
-//           </h2>
-
-//           <p className="mt-[14px] text-[15px] leading-[0.95] text-[#8C8C8C]">
-//             Spread betting lets you speculate on the price movements of global
-//             <br />
-//             markets, without owning the underlying asset.
-//             <br />
-//             Here’s how it works:
-//           </p>
-//         </div>
-
-//         {/* Steps */}
-//         <div className="mt-[76px] grid grid-cols-1 place-items-center gap-y-10 sm:grid-cols-2 lg:grid-cols-5 lg:gap-x-[18px]">
-//           {steps.map((step, index) => (
-//             <StepCard
-//               key={index}
-//               icon={step.icon}
-//               title={step.title}
-//               description={step.description}
-//             />
-//           ))}
-//         </div>
-
-//         {/* Divider */}
-//         <div className="mx-auto mt-[52px] h-px w-full max-w-[960px] bg-[#DDDDDD]" />
-
-//         {/* Bottom text */}
-//         <div className="mx-auto mt-[34px] max-w-[660px] text-center">
-//           <p className="text-[16px] font-medium leading-[1.38] text-[#2E66B0]">
-//             Spread betting with GMG gives you flexibility, speed, and FCA
-//             oversight, which makes it one
-//             <br />
-//             of the most attractive ways to trade in the UK.
-//           </p>
-//         </div>
-
-//         {/* CTA */}
-//         <div className="mt-[28px] flex justify-center">
-//           <button
-//             type="button"
-//             className="inline-flex h-[34px] items-center justify-center rounded-full bg-[#E67E2F] px-[24px] text-[12px] font-extrabold uppercase tracking-[0.01em] text-white shadow-[0_2px_0_rgba(0,0,0,0.03)] transition-transform duration-200 hover:scale-[1.02]"
-//           >
-//             Start Spread Betting Today
-//           </button>
-//         </div>
-//       </div>
-//     </section>
-//   );
-// }

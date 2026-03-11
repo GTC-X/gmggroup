@@ -77,45 +77,50 @@ export default function SpreadBettingForYouSection() {
 
 
       <div className="relative z-10 max-w-7xl mx-auto min-h-[428px] px-4 md:py-14 py-10 grid grid-cols-1 md:grid-cols-2 gap-10">
-        <div className="flex min-h-[428px] items-center">
-          <div className="max-w-[500px] flex flex-col items-center md:items-start">
-            <span className="inline-flex w-fit items-center text-center rounded-full bg-primary px-3 py-2 md:text-[16px] text-[14px] font-medium leading-none text-white">
-              Who Should Consider Spread Betting?
+
+  {/* Content */}
+  <div className="order-2 md:order-1 flex min-h-[428px] items-center">
+    <div className="max-w-[500px] flex flex-col items-center md:items-start">
+      <span className="inline-flex w-fit items-center text-center rounded-full bg-primary px-3 py-2 md:text-[16px] text-[14px] font-medium leading-none text-white">
+        Who Should Consider Spread Betting?
+      </span>
+
+      <h2 className="mt-6 text-[24px] text-center md:text-left font-bold leading-[1.2] tracking-[-0.03em] text-white md:text-[36px]">
+        Is Spread Betting for You?
+      </h2>
+
+      <p className="md:mt-10 mt-5 md:text-[18px] text-[13px] text-center md:text-left font-normal leading-[1.4] text-white">
+        If you're a UK or Northern Ireland trader who wants to:
+      </p>
+
+      <ul className="mt-6 md:space-y-4 space-y-3 mb-8">
+        {featurePoints.map((point, index) => (
+          <li key={index} className="flex items-start gap-[8px]">
+            <span className="mt-[2px] flex h-[22px] w-[22px] shrink-0 items-center justify-center rounded-full bg-white text-[#3b61a8]">
+              {point.icon}
             </span>
+            <span className="md:text-[16px] text-[14px] font-normal leading-[1.45] text-white">
+              {point?.text}
+            </span>
+          </li>
+        ))}
+      </ul>
 
-            <h2 className="mt-6 text-[24px] text-center md:text-left font-bold leading-[1.2] tracking-[-0.03em] text-white md:text-[36px]">
-              Is Spread Betting for You?
-            </h2>
+      <ScrollButton label="Start Spread Betting Today" targetId="register" />
+    </div>
+  </div>
 
-            <p className="md:mt-10 mt-5 md:text-[18px] text-[16px] text-center md:text-left font-normal leading-[1.4] text-white">
-              If you're a UK or Northern Ireland trader who wants to:
-            </p>
+  {/* Image */}
+  <div className="order-1 md:order-2 relative w-full h-[300px] md:h-[500px]">
+    <Image
+      src="/ab/top-image.webp"
+      alt="Spread Betting for You"
+      fill
+      className="object-contain"
+    />
+  </div>
 
-            <ul className="mt-6 md:space-y-4 space-y-3 mb-8">
-              {featurePoints.map((point, index) => (
-                <li key={index} className="flex items-start gap-[8px]">
-                  <span className="mt-[2px] flex h-[22px] w-[22px] shrink-0 items-center justify-center rounded-full bg-white text-[#3b61a8]">
-                    {point.icon}
-                  </span>
-                  <span className="md:text-[16px] text-[14px] font-normal leading-[1.45] text-white">
-                    {point?.text}
-                  </span>
-                </li>
-              ))}
-            </ul>
-
-           <ScrollButton label="Start Spread Betting Today" targetId="register" />
-          </div>
-        </div>
-        <div className="relative w-full h-[500px]">
-              <Image
-                src="/ab/top-image.webp"
-                alt="Spread Betting for You"
-                fill
-                className="object-contain"
-              />
-        </div>
-      </div>
+</div>
     </section>
   );
 }
