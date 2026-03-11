@@ -15,7 +15,10 @@ body {
 .flip-container {
   perspective: 1000px;
 }
-
+.PhoneInputInput
+{
+  outline: none;
+}
 .flip-inner {
   transform-style: preserve-3d;
   transition: transform 0.6s ease;
