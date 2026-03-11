@@ -7,10 +7,10 @@ const legalBlocks = [
   "The information on this website is not directed at residents of the United States, Japan, Canada, Belgium or any other jurisdiction, where such distribution or use may be contrary to local laws or regulation. You must be of minimum legal age as determined by your country of origin to use services on this website.",
 ];
 
-function SocialIcon({ label, children }) {
+function SocialIcon({ label, children, link }) {
   return (
     <a
-      href="#"
+      href={link}
       aria-label={label}
       className="grid h-9 w-9 p-2 place-items-center rounded-md border border-white bg-white/5 text-white/90 hover:bg-white/10 transition"
     >
@@ -34,12 +34,12 @@ export default function LegalFooterSection() {
         {/* Top row: social + payment */}
         <div className="flex md:gap-6 gap-4  sm:items-center justify-between">
           <div className="flex items-center gap-3">
-            <SocialIcon label="Facebook">
+            <SocialIcon label="Facebook" link="https://www.facebook.com/GMGMarkets/?locale=fo_FO">
               <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none">
                 <path d="M25 12.5C25 5.6 19.4 0 12.5 0C5.6 0 0 5.6 0 12.5C0 18.55 4.3 23.5875 10 24.75V16.25H7.5V12.5H10V9.375C10 6.9625 11.9625 5 14.375 5H17.5V8.75H15C14.3125 8.75 13.75 9.3125 13.75 10V12.5H17.5V16.25H13.75V24.9375C20.0625 24.3125 25 18.9875 25 12.5Z" fill="white" />
               </svg>
             </SocialIcon>
-            <SocialIcon label="LinkedIn">
+            <SocialIcon label="LinkedIn" link="https://uk.linkedin.com/company/global-markets-group">
               <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
                 <path d="M19.3333 0C19.9743 0 20.589 0.254612 21.0422 0.707825C21.4954 1.16104 21.75 1.77573 21.75 2.41667V19.3333C21.75 19.9743 21.4954 20.589 21.0422 21.0422C20.589 21.4954 19.9743 21.75 19.3333 21.75H2.41667C1.77573 21.75 1.16104 21.4954 0.707825 21.0422C0.254612 20.589 0 19.9743 0 19.3333V2.41667C0 1.77573 0.254612 1.16104 0.707825 0.707825C1.16104 0.254612 1.77573 0 2.41667 0H19.3333ZM18.7292 18.7292V12.325C18.7292 11.2803 18.3141 10.2783 17.5754 9.53959C16.8367 8.80085 15.8347 8.38583 14.79 8.38583C13.7629 8.38583 12.5667 9.01417 11.9867 9.95667V8.61542H8.61542V18.7292H11.9867V12.7721C11.9867 11.8417 12.7358 11.0804 13.6663 11.0804C14.1149 11.0804 14.5452 11.2586 14.8624 11.5759C15.1797 11.8931 15.3579 12.3234 15.3579 12.7721V18.7292H18.7292ZM4.68833 6.71833C5.22672 6.71833 5.74306 6.50446 6.12376 6.12376C6.50446 5.74306 6.71833 5.22672 6.71833 4.68833C6.71833 3.56458 5.81208 2.64625 4.68833 2.64625C4.14674 2.64625 3.62733 2.8614 3.24436 3.24436C2.8614 3.62733 2.64625 4.14674 2.64625 4.68833C2.64625 5.81208 3.56458 6.71833 4.68833 6.71833ZM6.36792 18.7292V8.61542H3.02083V18.7292H6.36792Z" fill="white" />
               </svg>
@@ -95,7 +95,7 @@ export default function LegalFooterSection() {
           {legalBlocks.map((p, idx) => (
             <p
               key={idx}
-              className="text-sm md:text-base leading-[1.5] text-white"
+              className="text-xs md:text-sm leading-[1.5] text-white"
             >
               {p}
             </p>
