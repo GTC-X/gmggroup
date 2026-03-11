@@ -17,106 +17,12 @@ import { toast } from "react-toastify";
 
 const NewEvent = ({ zapierUrl }) => {
     const locale = useLocale();
-    const { countryData } = useLocationDetail();
+    const { countryCode } = useLocationDetail();
     const [showOtp, setShowOtp] = useState(false);
     const [loading, setLoading] = useState(false);
     const [loadingOTP, setLoadingOTP] = useState(false);
     const [phoneOtpLoading, setPhoneOtpLoading] = useState(false);
     const [isOtpVerified, setIsOtpVerified] = useState(false);
-
-
-    useEffect(() => {
-        if (countryData?.alpha_2_code) {
-            const filterData = countryList.find(
-                (item) => item?.alpha_2_code === countryData.alpha_2_code
-            );
-            formik.setFieldValue(
-                "country",
-                filterData ? filterData?.en_short_name : ""
-            );
-        }
-    }, [countryData?.alpha_2_code, countryList]);
-
-
-
-    const [storedOtp, setStoredOtp] = useState("");
-    const [state, setState] = useState({
-        verifed: false,
-    });
-
-    const sendPhoneVerificationCode = async () => {
-        if (!formik?.values?.phone) {
-            toast.error("Phone is required");
-            return;
-        }
-        if (!isValidPhoneNumber(formik?.values?.phone)) {
-            toast.error("Invalid phone number");
-            return;
-        }
-        setPhoneOtpLoading(true);
-        try {
-            const res = await axios.post(`/api/send-phone-otp`, {
-                phone: formik.values.phone,
-                first_name: formik.values.nickname,
-                locale,
-                channel: "whatsapp",
-            });
-
-            if (res?.data?.success || res?.data?.message) {
-                setState((st) => ({
-                    ...st,
-                    verifed: false,
-                }));
-                formik.setFieldValue("otp", "");
-                setShowOtp(true);
-                toast.success("OTP sent successfully");
-            } else {
-                toast.error(res?.data?.message | "An error occurred");
-            }
-        } catch (err) {
-            setShowOtp(false);
-            toast.error(
-                err?.response?.data?.message ||
-                err?.message ||
-
-                "An error occurred"
-            );
-        } finally {
-            setPhoneOtpLoading(false);
-        }
-    };
-
-    // verify OTP server-side
-    const verifyOtpCode = async (otp) => {
-        if (!otp || otp.length !== 6) {
-            return;
-        }
-
-        try {
-            const res = await axios.post("/api/verify-otp", {
-                phone: formik.values.phone,
-                otp: otp,
-            });
-
-            if (res?.data?.success) {
-                toast.success("OTP verified successfully");
-                setShowOtp(false);
-                setIsOtpVerified(true); // Mark OTP as verified
-            } else {
-                toast.error(res?.data?.message || "Invalid OTP");
-                setIsOtpVerified(false); // Ensure it's false on failure
-            }
-        } catch (error) {
-            console.error("OTP verification error:", error);
-            toast.error(
-                error?.response?.data?.message ||
-                error?.message ||
-
-                "Failed to verify OTP"
-            );
-            setIsOtpVerified(false); // Ensure it's false on error
-        }
-    };
 
     const generatePassword = (length = 12) => {
         const lower = "abcdefghijklmnopqrstuvwxyz";
@@ -254,6 +160,103 @@ const NewEvent = ({ zapierUrl }) => {
         },
     });
 
+    useEffect(() => {
+        if (countryCode && countryList?.length) {
+            const code = countryCode.toUpperCase?.() || countryCode;
+            const filterData = countryList.find(
+                (item) => (item?.alpha_2_code || "").toUpperCase() === code
+            );
+            formik.setFieldValue(
+                "country",
+                filterData ? filterData.en_short_name : ""
+            );
+        }
+    }, [countryCode, countryList]);
+
+
+
+
+    const [storedOtp, setStoredOtp] = useState("");
+    const [state, setState] = useState({
+        verifed: false,
+    });
+
+    const sendPhoneVerificationCode = async () => {
+        if (!formik?.values?.phone) {
+            toast.error("Phone is required");
+            return;
+        }
+        if (!isValidPhoneNumber(formik?.values?.phone)) {
+            toast.error("Invalid phone number");
+            return;
+        }
+        setPhoneOtpLoading(true);
+        try {
+            const res = await axios.post(`/api/send-phone-otp`, {
+                phone: formik.values.phone,
+                first_name: formik.values.nickname,
+                locale,
+                channel: "whatsapp",
+            });
+
+            if (res?.data?.success || res?.data?.message) {
+                setState((st) => ({
+                    ...st,
+                    verifed: false,
+                }));
+                formik.setFieldValue("otp", "");
+                setShowOtp(true);
+                toast.success("OTP sent successfully");
+            } else {
+                toast.error(res?.data?.message | "An error occurred");
+            }
+        } catch (err) {
+            setShowOtp(false);
+            toast.error(
+                err?.response?.data?.message ||
+                err?.message ||
+
+                "An error occurred"
+            );
+        } finally {
+            setPhoneOtpLoading(false);
+        }
+    };
+
+    // verify OTP server-side
+    const verifyOtpCode = async (otp) => {
+        if (!otp || otp.length !== 6) {
+            return;
+        }
+
+        try {
+            const res = await axios.post("/api/verify-otp", {
+                phone: formik.values.phone,
+                otp: otp,
+            });
+
+            if (res?.data?.success) {
+                toast.success("OTP verified successfully");
+                setShowOtp(false);
+                setIsOtpVerified(true); // Mark OTP as verified
+            } else {
+                toast.error(res?.data?.message || "Invalid OTP");
+                setIsOtpVerified(false); // Ensure it's false on failure
+            }
+        } catch (error) {
+            toast.error(
+                error?.response?.data?.message ||
+                error?.message ||
+
+                "Failed to verify OTP"
+            );
+            setIsOtpVerified(false); // Ensure it's false on error
+        }
+    };
+
+
+
+
     // When user changes phone after verifying, require OTP again
     useEffect(() => {
         if (isOtpVerified) {
@@ -318,9 +321,10 @@ const NewEvent = ({ zapierUrl }) => {
                             <div className="relative mb-2">
 
                                 <PhoneInput
+                                    key={`phone-${countryCode || "AE"}`}
                                     international
                                     countryCallingCodeEditable={false}
-                                    defaultCountry="AE"
+                                    defaultCountry={countryCode || "AE"}
                                     value={formik.values.phone}
                                     onChange={(phone) => formik.setFieldValue("phone", phone)}
                                     className={`w-full px-4 py-3 border ${formik.touched.phone && formik.errors.phone ? "border-red-500" : "border-gray-300"} rounded-lg focus:outline-none`}
