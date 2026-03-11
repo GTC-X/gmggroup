@@ -15,7 +15,7 @@ export async function POST(req) {
       from: MAILGUN_FROM,
       to: "info@gmgmarkets.co.uk",
       bcc:"zeeshan@gtcfx.com",
-      subject: `Spread Betting. Tax-Free. FCA-Regulated`,
+      subject: `GMGmarkets -Spread Betting. Tax-Free. FCA-Regulated`,
       ...generateEmailContent(reqBody),
     });
 

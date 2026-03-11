@@ -1,135 +1,9 @@
-// "use client";
-
-// /**
-//  * Replace these assets in your public folder:
-//  * - Section background: /spread-betting-hero-bg.jpg (blue + chart overlays)
-//  * - Right graphic: /pound-coin-stack.png (gold £ coin stack)
-//  */
-
-// const checklist = [
-//   "Keep more of your profits with tax-efficient trading*.",
-//   "Trade global markets without paying stamp duty.",
-//   "Profit in rising or falling markets with flexible strategies.",
-//   "Start small with low entry costs and scale up as you grow.",
-//   "Trade confidently under FCA regulation.",
-//   "Then yes, spread betting with GMG is built for you.",
-// ];
-
-// export default function SpreadBettingForYouSection() {
-//   return (
-//     <section className="relative w-full min-h-[600px] md:min-h-[700px] overflow-hidden">
-//       {/* Dummy background - replace with your image */}
-//       <div
-//         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-//         style={{
-//           backgroundImage: "url('/spread-betting-hero-bg.jpg')",
-//           backgroundColor: "#0f172a",
-//         }}
-//       />
-//       {/* Blue gradient overlay */}
-//       <div
-//         className="absolute inset-0"
-//         style={{
-//           background:
-//             "linear-gradient(135deg, rgba(30, 58, 138, 0.95) 0%, rgba(15, 23, 42, 0.98) 50%, rgba(12, 20, 45, 0.99) 100%)",
-//         }}
-//       />
-//       {/* Optional: subtle chart overlay - replace with real chart graphic if needed */}
-//       <div
-//         className="absolute inset-0 opacity-20 bg-no-repeat bg-right bg-contain"
-//         style={{ backgroundImage: "url('/charts-overlay.png')" }}
-//       />
-
-//       <div className="relative container mx-auto max-w-6xl px-4 md:px-6 py-16 md:py-24">
-//         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
-//           {/* Left: text content */}
-//           <div className="lg:col-span-6 space-y-6 md:space-y-7">
-//             {/* Context box */}
-//             <div className="inline-block rounded-lg border-2 border-[#1e3a8a] bg-white px-4 py-2">
-//               <span className="text-xs md:text-sm font-semibold text-[#1a202c] tracking-tight">
-//                 Who Should Consider Spread Betting?
-//               </span>
-//             </div>
-
-//             {/* Main heading */}
-//             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight tracking-tight">
-//               Is Spread Betting for You?
-//             </h2>
-
-//             {/* Intro text */}
-//             <p className="text-lg md:text-xl text-white font-normal leading-snug">
-//               If you&apos;re a UK or Northern Ireland trader who wants to:
-//             </p>
-
-//             {/* Bulleted list with check icons */}
-//             <ul className="space-y-4 md:space-y-5">
-//               {checklist.map((item, index) => (
-//                 <li key={index} className="flex gap-3 md:gap-4 items-start">
-//                   <span
-//                     className="flex-shrink-0 w-6 h-6 md:w-7 md:h-7 rounded-full flex items-center justify-center bg-[#4ade80] mt-0.5"
-//                     aria-hidden
-//                   >
-//                     <svg
-//                       className="w-3.5 h-3.5 md:w-4 md:h-4 text-white"
-//                       fill="none"
-//                       viewBox="0 0 24 24"
-//                       stroke="currentColor"
-//                       strokeWidth="3"
-//                       strokeLinecap="round"
-//                       strokeLinejoin="round"
-//                     >
-//                       <path d="M5 13l4 4L19 7" />
-//                     </svg>
-//                   </span>
-//                   <span className="text-base md:text-lg text-white leading-relaxed">
-//                     {item}
-//                   </span>
-//                 </li>
-//               ))}
-//             </ul>
-
-//             {/* CTA button */}
-//             <div className="pt-2">
-//               <button
-//                 type="button"
-//                 className="inline-block rounded-full bg-[#f97316] hover:bg-[#ea580c] text-white font-bold text-base md:text-lg uppercase tracking-wide px-8 md:px-10 py-4 md:py-5 transition-colors shadow-lg"
-//               >
-//                 Start Spread Betting Today
-//               </button>
-//             </div>
-//           </div>
-
-//           {/* Right: coin / graphic - replace src with your £ coin image */}
-//           <div className="lg:col-span-6 flex justify-center lg:justify-end items-center">
-//             <div className="relative w-full max-w-[320px] md:max-w-[400px] lg:max-w-[480px] aspect-square flex items-center justify-center">
-//               <img
-//                 src="/pound-coin-stack.png"
-//                 alt=""
-//                 className="max-w-full max-h-full w-auto h-auto object-contain drop-shadow-2xl"
-//                 onError={(e) => {
-//                   e.target.style.display = "none";
-//                   const fallback = e.target.nextElementSibling;
-//                   if (fallback) {
-//                     fallback.classList.remove("hidden");
-//                     fallback.classList.add("flex");
-//                   }
-//                 }}
-//               />
-//               <div className="absolute inset-0 hidden items-center justify-center rounded-2xl bg-white/5 border border-white/10 text-white/40 text-sm">
-//                 Replace with £ coin image (pound-coin-stack.png)
-//               </div>
-//             </div>
-//           </div>
-//         </div>
-//       </div>
-//     </section>
-//   );
-// }
-
 
 "use client";
 
 import React from "react";
+import ScrollButton from "./ScrollButton";
+import Image from "next/image";
 
 const featurePoints = [
   {
@@ -188,60 +62,65 @@ const featurePoints = [
         <path d="M7.69839 9.82759C7.37207 10.3448 6.97157 10.7143 6.54141 10.8768V6.51724H7.69839V5.48276H6.54141V1.12315C6.97157 1.28571 7.37207 1.65517 7.69839 2.17241V0.236453C7.1644 0.0886699 6.60074 0 6.02225 0C2.69963 0 0 2.68966 0 6C0 9.31034 2.69963 12 6.02225 12C6.60074 12 7.1644 11.9113 7.69839 11.7635V9.82759ZM3.44129 1.74384C2.83313 2.73399 2.44747 4.06404 2.38813 5.48276H1.06799C1.23115 3.93103 2.12114 2.54187 3.44129 1.74384ZM1.06799 6.51724H2.3733C2.44747 7.93596 2.83313 9.26601 3.42645 10.2562C2.12114 9.45813 1.23115 8.06896 1.06799 6.51724ZM5.50309 10.8768C4.39061 10.4483 3.53028 8.6601 3.41162 6.51724H5.50309V10.8768ZM5.50309 5.48276H3.41162C3.53028 3.32512 4.39061 1.53695 5.50309 1.12315V5.48276Z" fill="#215C9E" />
       </svg>
     ),
-    text: "Then yes, spread betting with GMG is built for you.",
+    text: "Then yes, spread betting with GMGmarkets is built for you.",
   },
 ];
 
 export default function SpreadBettingForYouSection() {
   return (
-    <section className="relative isolate overflow-hidden">
+    <section className="relative isolate overflow-hidden bg-[url('/ab/banners.webp')] bg-cover bg-top-center">
       {/* Background */}
-      <div className="absolute inset-0">
-        <img
-          src="/bg-spread.svg"
-          alt="Background"
-          className="h-full w-full object-cover object-bottom"
-        />
-      </div>
+     
 
       {/* Overlay */}
       <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(6,34,84,0.94)_0%,rgba(6,34,84,0.82)_34%,rgba(6,34,84,0.45)_58%,rgba(6,34,84,0.12)_78%,rgba(6,34,84,0.02)_100%)]" />
 
 
-      <div className="relative z-10 max-w-7xl mx-auto min-h-[428px] px-4 md:py-14 py-10">
-        <div className="flex min-h-[428px] items-center">
-          <div className="max-w-[500px] flex flex-col items-center md:items-start">
-            <span className="inline-flex w-fit items-center text-center rounded-full bg-white px-3 py-2 md:text-[16px] text-[14px] font-medium leading-none text-[#215C9E]">
-              Who Should Consider Spread Betting?
+      <div className="relative z-10 max-w-7xl mx-auto min-h-[428px] px-4 md:py-14 py-10 grid grid-cols-1 md:grid-cols-2 gap-10">
+
+  {/* Content */}
+  <div className="order-2 md:order-1 flex min-h-[428px] items-center">
+    <div className="max-w-[500px] flex flex-col items-center md:items-start">
+      <span className="inline-flex w-fit items-center text-center rounded-full bg-primary px-3 py-2 md:text-[16px] text-[14px] font-medium leading-none text-white">
+        Who Should Consider Spread Betting?
+      </span>
+
+      <h2 className="mt-6 text-[24px] text-center md:text-left font-bold leading-[1.2] tracking-[-0.03em] text-white md:text-[36px]">
+        Is Spread Betting for You?
+      </h2>
+
+      <p className="md:mt-10 mt-5 md:text-[18px] text-[13px] text-center md:text-left font-normal leading-[1.4] text-white">
+        If you're a UK or Northern Ireland trader who wants to:
+      </p>
+
+      <ul className="mt-6 md:space-y-4 space-y-3 mb-8">
+        {featurePoints.map((point, index) => (
+          <li key={index} className="flex items-start gap-[8px]">
+            <span className="mt-[2px] flex h-[22px] w-[22px] shrink-0 items-center justify-center rounded-full bg-white text-[#3b61a8]">
+              {point.icon}
             </span>
+            <span className="md:text-[16px] text-[14px] font-normal leading-[1.45] text-white">
+              {point?.text}
+            </span>
+          </li>
+        ))}
+      </ul>
 
-            <h2 className="mt-6 text-[24px] text-center md:text-left font-bold leading-[1.2] tracking-[-0.03em] text-white md:text-[36px]">
-              Is Spread Betting for You?
-            </h2>
+      <ScrollButton label="Start Spread Betting Today" targetId="register" />
+    </div>
+  </div>
 
-            <p className="md:mt-10 mt-5 md:text-[18px] text-[16px] text-center md:text-left font-normal leading-[1.4] text-white">
-              If you're a UK or Northern Ireland trader who wants to:
-            </p>
+  {/* Image */}
+  <div className="order-1 md:order-2 relative w-full h-[300px] md:h-[500px]">
+    <Image
+      src="/ab/top-image.webp"
+      alt="Spread Betting for You"
+      fill
+      className="object-contain"
+    />
+  </div>
 
-            <ul className="mt-6 md:space-y-4 space-y-3">
-              {featurePoints.map((point, index) => (
-                <li key={index} className="flex items-start gap-[8px]">
-                  <span className="mt-[2px] flex h-[22px] w-[22px] shrink-0 items-center justify-center rounded-full bg-white text-[#3b61a8]">
-                    {point.icon}
-                  </span>
-                  <span className="md:text-[16px] text-[14px] font-normal leading-[1.45] text-white">
-                    {point?.text}
-                  </span>
-                </li>
-              ))}
-            </ul>
-
-            <button className="mt-8 w-fit  inline-flex items-center justify-center rounded-full bg-[#e97e2d] px-[20px] py-[12px] text-[14px] font-extrabold uppercase text-white shadow-[0_8px_22px_rgba(233,126,45,0.34)]">
-              Start Spread Betting Today
-            </button>
-          </div>
-        </div>
-      </div>
+</div>
     </section>
   );
 }

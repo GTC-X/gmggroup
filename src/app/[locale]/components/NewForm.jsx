@@ -142,7 +142,7 @@ const NewEvent = ({ zapierUrl }) => {
                     const ok = zapierResult.value?.data?.success ?? true;
                     if (ok) {
                         toast.success(
-                            zapierResult.value?.data?.message || "Synced with CRM/Zapier."
+                            zapierResult.value?.data?.message || "✅ Your form has been submitted successfully."
                         );
                     }
                     formik.resetForm();
@@ -276,7 +276,7 @@ const NewEvent = ({ zapierUrl }) => {
         <section className="demo-account">
             <div className="demo">
                 <div className="relative py-[1px] px-[1px]" style={boxStyle}>
-                    <h2 className="text-center py-4 bg-gradient-to-b from-[#202d7bdb] via-[#050331] to-[#050331] rounded-t-xl text-lg  text-white">
+                    <h2 className="text-center py-4 bg-gradient-to-b from-primary via-[#050331] to-primary rounded-t-xl text-lg  text-white">
                         Register Now
                     </h2>
                 </div>
@@ -484,15 +484,15 @@ const NewEvent = ({ zapierUrl }) => {
                                     className="h-5 w-5"
                                 />
                                 <p className="inline px-3 text-[10px] text-primary">
-                                    I agree to the
-                                    <a
+                                   
+
+
+
+
+By submitting your details you are agreeing to be contacted according to our  <a
                                         className="text-secondary underline"
-                                        href="https://gtcfx-bucket.s3.ap-southeast-1.amazonaws.com/pdf-files/Vanuatu.pdf"
-                                    >
-                                        {" "}
-                                        terms and conditions
-                                    </a>
-                                    ; and I have read and accept the privacy policy.
+                                        href="https://gmgmarkets.co.uk/wp-content/uploads/2024/07/GLOBAL-MARKETS-GROUP-LIMITED_PRIVACY-POLICY.pdf"
+                                    >Privacy Policy</a>, so that we can respond to your inquiries.
                                 </p>
                             </div>
                         </div>

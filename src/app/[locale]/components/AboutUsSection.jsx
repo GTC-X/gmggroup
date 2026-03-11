@@ -1,5 +1,7 @@
 "use client";
 
+import ScrollButton from "./ScrollButton";
+
 export default function AboutUsSection() {
   return (
     <section className="w-full bg-[#ECF4FD] py-8 md:py-16  overflow-hidden">
@@ -39,7 +41,7 @@ export default function AboutUsSection() {
             </p>
 
             {/* Second paragraph */}
-            <p className="text-[14px] md:text-base text-[#8D9099] leading-relaxed">
+            <p className="text-[14px] md:text-base text-[#8D9099] leading-relaxed mb-8">
               Retail and professional clients worldwide choose us as their
               preferred trading partner, enjoying the benefits of secure and
               reliable access to trading platforms and investment instruments,
@@ -47,9 +49,7 @@ export default function AboutUsSection() {
             </p>
 
             {/* CTA button */}
-            <button className="rounded-full bg-[#E47732] px-7 py-3 text-[14px] md:text-[16px] font-medium uppercase tracking-[0.02em] text-white">
-            Start Spread Betting Today
-          </button>
+            <ScrollButton label="Start Spread Betting Today" targetId="register" />
           </div>
         </div>
       </div>

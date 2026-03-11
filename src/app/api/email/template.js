@@ -140,7 +140,7 @@ Need Help?
                 <table width="100%" cellpadding="0" cellspacing="0">
                   <tr>
                     <td align="left">
-                      <img src="https://gtcfx-bucket.s3.ap-southeast-1.amazonaws.com/logo-email.jpg" alt="GTC Logo" style="width: 160px;" />
+                      <img src="https://gmgmarkets.co.uk/wp-content/uploads/2024/07/gmg-logo-1.png" alt="GTC Logo" style="width: 160px;" />
                     </td>
                     <td align="right" style="font-size: 13px; color: #192055; line-height: 25px;">
                       📞 Phone: +44 (0) 203 8653306<br/>

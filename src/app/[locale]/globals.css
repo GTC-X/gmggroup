@@ -4,8 +4,8 @@
   font-family: var(--font-poppins);
 }
 @theme {
-  --color-primary: #1a2256;     /* Dark blue */
-  --color-secondary: #b98751;   /* Gold yellow */
+  --color-primary: #215C9E;     /* Dark blue */
+  --color-secondary: #E47732;   /* yellow */
 }
 
 body {
@@ -15,7 +15,10 @@ body {
 .flip-container {
   perspective: 1000px;
 }
-
+.PhoneInputInput
+{
+  outline: none;
+}
 .flip-inner {
   transform-style: preserve-3d;
   transition: transform 0.6s ease;
