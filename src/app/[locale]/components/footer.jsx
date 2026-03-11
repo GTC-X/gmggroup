@@ -13,7 +13,7 @@ const BRAND = {
 export default function EduTradeFooterBar() {
   return (
     <footer
-      className="w-full bg-[color:var(--purple)]"
+      className="w-full bg-[color:var(--purple)]" 
       style={{ ['--purple']: BRAND.purple }}
       role="contentinfo"
       aria-label="Footer"
