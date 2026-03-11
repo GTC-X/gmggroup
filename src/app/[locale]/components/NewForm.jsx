@@ -236,7 +236,7 @@ const NewEvent = ({ zapierUrl }) => {
                     const ok = zapierResult.value?.data?.success ?? true;
                     if (ok) {
                         toast.success(
-                            zapierResult.value?.data?.message || "Synced with CRM/Zapier."
+                            zapierResult.value?.data?.message || "✅ Your form has been submitted successfully."
                         );
                     }
                     formik.resetForm();
