@@ -23,7 +23,7 @@ const NewEvent = ({ zapierUrl }) => {
     const [loadingOTP, setLoadingOTP] = useState(false);
     const [phoneOtpLoading, setPhoneOtpLoading] = useState(false);
     const [isOtpVerified, setIsOtpVerified] = useState(false);
-
+    const [countryAutoSelected, setCountryAutoSelected] = useState(false);
     const generatePassword = (length = 12) => {
         const lower = "abcdefghijklmnopqrstuvwxyz";
         const upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -109,7 +109,7 @@ const NewEvent = ({ zapierUrl }) => {
 
                 // 2) Fire Zapier + Email AFTER MT5 success (run in parallel; don’t block redirect)
                 const zapierWebhookUrl = zapierUrl ||
-                    "https://hooks.zapier.com/hooks/catch/16420445/ueb5fg4/"; // <- adjust if you use a direct Zapier hook
+                    "https://hooks.zapier.com/hooks/catch/16420445/uxgw1xb/"; // <- adjust if you use a direct Zapier hook
   
                 const partnerPayload = {
                     email: formik?.values?.email,
@@ -161,17 +161,19 @@ const NewEvent = ({ zapierUrl }) => {
     });
 
     useEffect(() => {
-        if (countryCode && countryList?.length) {
-            const code = countryCode.toUpperCase?.() || countryCode;
-            const filterData = countryList.find(
-                (item) => (item?.alpha_2_code || "").toUpperCase() === code
-            );
-            formik.setFieldValue(
-                "country",
-                filterData ? filterData.en_short_name : ""
-            );
-        }
-    }, [countryCode, countryList]);
+    if (!countryCode || !countryList?.length || countryAutoSelected) return;
+
+    const normalizedCode = String(countryCode).toUpperCase();
+
+    const matchedCountry = countryList.find(
+        (item) => String(item?.alpha_2_code).toUpperCase() === normalizedCode
+    );
+
+    if (matchedCountry?.en_short_name) {
+        formik.setFieldValue("country", matchedCountry.en_short_name);
+        setCountryAutoSelected(true);
+    }
+}, [countryCode, countryAutoSelected]);
 
 
 
@@ -397,70 +399,40 @@ const NewEvent = ({ zapierUrl }) => {
                                                 </p>
                                             )}
                                         </div>
-                                        {/* <div>
-                    <button
-                      disabled={state?.verifed === true}
-                      type="button"
-                      className=" bg-primary whitespace-pre right-3 rounded-md cursor-pointer text-white  py-2 px-2"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        verifyPhoneOtp(formik.values.otp);
-                      }}
-                    >
-                      Verify OTP
-                    </button>
-                  </div> */}
+                                      
                                     </div>
                                 </div>
                             )}
 
                         </div>
 
-                        {/* Password & Confirm Password */}
-                        {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-              <div className="relative">
-                <RiLockPasswordLine className="absolute top-4 left-3 text-gray-400 h-5 w-5" />
-                <input
-                  type="password"
-                  className={`w-full px-4 bg-white py-3 pl-9 border ${formik.touched.password && formik.errors.password ? "border-red-500" : "border-gray-300"} rounded-lg focus:outline-none`}
-                  placeholder="Password"
-                  {...formik.getFieldProps("password")}
-                />
-                {formik.touched.password && formik.errors.password && (
-                  <p className="text-red-500 text-sm">{formik.errors.password}</p>
-                )}
-              </div>
-              <div className="relative">
-                <RiLockPasswordLine className="absolute top-4 left-3 text-gray-400 h-5 w-5" />
-                <input
-                  type="password"
-                  className={`w-full bg-white px-4 py-3 pl-9 border ${formik.touched.confirm_password && formik.errors.confirm_password ? "border-red-500" : "border-gray-300"} rounded-lg focus:outline-none`}
-                  placeholder="Confirm Password"
-                  {...formik.getFieldProps("confirm_password")}
-                />
-                {formik.touched.confirm_password && formik.errors.confirm_password && (
-                  <p className="text-red-500 text-sm">{formik.errors.confirm_password}</p>
-                )}
-              </div>
-            </div> */}
+                       
 
                         <div className="relative mb-4">
-                            <GiWorld className="absolute top-4 left-3 text-gray-400 h-5 w-5" />
-                            <select
-                                className={`w-full text-primary bg-white px-4 py-3 pl-9 border ${formik.touched.country && formik.errors.country ? "border-red-500" : "border-gray-300"} rounded-lg text-gray-700`}
-                                {...formik.getFieldProps("country")}
-                            >
-                                <option value="">Select Country</option>
-                                {countryList.map((item) => (
-                                    <option key={item?.alpha_2_code} value={item?.en_short_name}>
-                                        {item?.en_short_name}
-                                    </option>
-                                ))}
-                            </select>
-                            {formik.touched.country && formik.errors.country && (
-                                <p className="text-red-500 text-sm">{formik.errors.country}</p>
-                            )}
-                        </div>
+    <GiWorld className="absolute top-4 left-3 text-gray-400 h-5 w-5" />
+    <select
+        name="country"
+        value={formik.values.country}
+        onChange={formik.handleChange}
+        onBlur={formik.handleBlur}
+        className={`w-full bg-white px-4 py-3 pl-9 border ${
+            formik.touched.country && formik.errors.country
+                ? "border-red-500"
+                : "border-gray-300"
+        } rounded-lg text-gray-700 focus:outline-none`}
+    >
+        <option value="">Select Country</option>
+        {countryList.map((item) => (
+            <option key={item.alpha_2_code} value={item.en_short_name}>
+                {item.en_short_name}
+            </option>
+        ))}
+    </select>
+
+    {formik.touched.country && formik.errors.country && (
+        <p className="text-red-500 text-sm">{formik.errors.country}</p>
+    )}
+</div>
                         <div>
                             <label
                                 className={`block text-sm pb-2 ${formik.touched.terms && formik.errors.terms
