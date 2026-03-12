@@ -22,11 +22,12 @@ export default function ScrollButton({
   };
 
   return (
-    <button
-      onClick={handleScroll}
+    <a
+      href="https://client.gmgmarkets.co.uk/registration/new/"
+      target="_blank"
       className={`rounded-full bg-[#E47732] px-7 py-3 cursor-pointer text-[14px] md:text-[16px] font-medium uppercase tracking-[0.02em] text-white hover:opacity-90 transition ${className}`}
     >
       {label}
-    </button>
+    </a>
   );
 }
