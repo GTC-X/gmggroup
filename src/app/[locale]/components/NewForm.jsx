@@ -1,7 +1,7 @@
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocale } from "next-intl";
 import { RiUserLocationLine } from "react-icons/ri";
 import { CiMail } from "react-icons/ci";
@@ -18,12 +18,14 @@ import { toast } from "react-toastify";
 const NewEvent = ({ zapierUrl }) => {
     const locale = useLocale();
     const { countryCode } = useLocationDetail();
-    const [showOtp, setShowOtp] = useState(false);
+    const didAutoSetCountryRef = useRef(false);
     const [loading, setLoading] = useState(false);
-    const [loadingOTP, setLoadingOTP] = useState(false);
-    const [phoneOtpLoading, setPhoneOtpLoading] = useState(false);
     const [isOtpVerified, setIsOtpVerified] = useState(false);
-    const [countryAutoSelected, setCountryAutoSelected] = useState(false);
+    const [sendEmailOtpLoading, setSendEmailOtpLoading] = useState(false);
+    const [disableSendOtpBtn, setDisableSendOtpBtn] = useState(false);
+    const [showEmailOtpVerify, setShowEmailOtpVerify] = useState(false);
+    const [storedEmailOtp, setStoredEmailOtp] = useState("");
+
     const generatePassword = (length = 12) => {
         const lower = "abcdefghijklmnopqrstuvwxyz";
         const upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -57,7 +59,8 @@ const NewEvent = ({ zapierUrl }) => {
             password: generatePassword(),
             invest_password: generatePassword(),
             confirm_password: "",
-            country: "",
+            // Default selection; geo-detection overrides when available
+            country: "United Arab Emirates",
             /* platform: "", */
             otp: "",
             terms: false,
@@ -105,12 +108,12 @@ const NewEvent = ({ zapierUrl }) => {
 
                 // Optional UI resets
                 formik.resetForm();
-                setShowOtp?.(false);
+                setShowEmailOtpVerify?.(false);
 
                 // 2) Fire Zapier + Email AFTER MT5 success (run in parallel; don’t block redirect)
                 const zapierWebhookUrl = zapierUrl ||
                     "https://hooks.zapier.com/hooks/catch/16420445/uxgw1xb/"; // <- adjust if you use a direct Zapier hook
-  
+
                 const partnerPayload = {
                     email: formik?.values?.email,
                     name: formik?.values?.nickname,
@@ -161,112 +164,122 @@ const NewEvent = ({ zapierUrl }) => {
     });
 
     useEffect(() => {
-    if (!countryCode || !countryList?.length || countryAutoSelected) return;
+        // Only auto-set once; after that user can change freely.
+        if (didAutoSetCountryRef.current) return;
+        if (!countryList?.length) return;
 
-    const normalizedCode = String(countryCode).toUpperCase();
+        const normalizedCode = countryCode ? String(countryCode).toUpperCase() : null;
+        const matchedCountry = normalizedCode
+            ? countryList.find(
+                (item) => String(item?.alpha_2_code).toUpperCase() === normalizedCode
+            )
+            : null;
 
-    const matchedCountry = countryList.find(
-        (item) => String(item?.alpha_2_code).toUpperCase() === normalizedCode
-    );
-
-    if (matchedCountry?.en_short_name) {
-        formik.setFieldValue("country", matchedCountry.en_short_name);
-        setCountryAutoSelected(true);
-    }
-}, [countryCode, countryAutoSelected]);
-
-
-
-
-    const [storedOtp, setStoredOtp] = useState("");
-    const [state, setState] = useState({
-        verifed: false,
-    });
-
-    const sendPhoneVerificationCode = async () => {
-        if (!formik?.values?.phone) {
-            toast.error("Phone is required");
+        if (matchedCountry?.en_short_name) {
+            formik.setFieldValue("country", matchedCountry.en_short_name);
+            didAutoSetCountryRef.current = true;
             return;
         }
-        if (!isValidPhoneNumber(formik?.values?.phone)) {
-            toast.error("Invalid phone number");
+
+        // Fallback: ensure a valid option selected (UAE) if nothing set.
+        if (!formik.values.country) {
+            const uae = countryList.find((c) => c?.alpha_2_code === "AE");
+            if (uae?.en_short_name) {
+                formik.setFieldValue("country", uae.en_short_name);
+                didAutoSetCountryRef.current = true;
+            }
+        }
+    }, [countryCode, countryList]);
+
+
+    const sendEmailOtp = async () => {
+        // First validate email
+        if (!formik.values.email) {
+            toast.error("Email is required");
             return;
         }
-        setPhoneOtpLoading(true);
+
+        setSendEmailOtpLoading(true);
+        setDisableSendOtpBtn(true);
+
         try {
-            const res = await axios.post(`/api/send-phone-otp`, {
-                phone: formik.values.phone,
-                first_name: formik.values.nickname,
-                locale,
-                channel: "whatsapp",
+            // Validate email first
+            const validationResponse = await axios.post(`/api/validate-email`, {
+                email: formik.values.email,
             });
 
-            if (res?.data?.success || res?.data?.message) {
-                setState((st) => ({
-                    ...st,
-                    verifed: false,
-                }));
-                formik.setFieldValue("otp", "");
-                setShowOtp(true);
-                toast.success("OTP sent successfully");
+            if (!validationResponse.data.valid) {
+                toast.error("Invalid email address. Please use a valid email.");
+                setSendEmailOtpLoading(false);
+                setDisableSendOtpBtn(false);
+                return;
+            }
+
+            // If email is valid, send OTP
+            const response = await axios.post(
+                `/api/otp-smtp`,
+                JSON.stringify({
+                    email: formik.values.email,
+                    first_name: formik.values.nickname,
+                })
+            );
+
+            if (response.status === 200) {
+                setSendEmailOtpLoading(false);
+                setStoredEmailOtp(response.data.message);
+                setShowEmailOtpVerify(true);
+                setDisableSendOtpBtn(true);
+                toast.success(`OTP sent to ${formik.values.email}`);
             } else {
-                toast.error(res?.data?.message | "An error occurred");
+                toast.error("Failed to send OTP. Please try again.");
+                setDisableSendOtpBtn(false);
             }
         } catch (err) {
-            setShowOtp(false);
-            toast.error(
-                err?.response?.data?.message ||
-                err?.message ||
-
-                "An error occurred"
-            );
-        } finally {
-            setPhoneOtpLoading(false);
+            setSendEmailOtpLoading(false);
+            if (err.response?.data?.reason) {
+                toast.error("Invalid email address");
+            } else {
+                toast.error("Failed to send OTP. Please try again.");
+            }
+            setDisableSendOtpBtn(false);
         }
     };
 
-    // verify OTP server-side
-    const verifyOtpCode = async (otp) => {
-        if (!otp || otp.length !== 6) {
+    const verifyEmailOtpCode = (otp) => {
+        if (!otp || otp.length !== 6) return;
+
+        const expected = String(storedEmailOtp || "").trim();
+        const received = String(otp || "").trim();
+
+        if (!expected) {
+            toast.error("Please request an OTP first.");
+            setIsOtpVerified(false);
             return;
         }
 
-        try {
-            const res = await axios.post("/api/verify-otp", {
-                phone: formik.values.phone,
-                otp: otp,
-            });
-
-            if (res?.data?.success) {
-                toast.success("OTP verified successfully");
-                setShowOtp(false);
-                setIsOtpVerified(true); // Mark OTP as verified
-            } else {
-                toast.error(res?.data?.message || "Invalid OTP");
-                setIsOtpVerified(false); // Ensure it's false on failure
-            }
-        } catch (error) {
-            toast.error(
-                error?.response?.data?.message ||
-                error?.message ||
-
-                "Failed to verify OTP"
-            );
-            setIsOtpVerified(false); // Ensure it's false on error
+        if (received === expected) {
+            toast.success("OTP verified successfully");
+            setShowEmailOtpVerify(false);
+            setIsOtpVerified(true);
+        } else {
+            toast.error("Invalid OTP");
+            setIsOtpVerified(false);
         }
     };
 
 
 
 
-    // When user changes phone after verifying, require OTP again
+    // When user changes email after verifying, require OTP again
     useEffect(() => {
         if (isOtpVerified) {
             setIsOtpVerified(false);
             formik.setFieldValue("otp", "");
-            setShowOtp(false);
+            setShowEmailOtpVerify(false);
+            setStoredEmailOtp("");
+            setDisableSendOtpBtn(false);
         }
-    }, [formik.values.phone]);
+    }, [formik.values.email]);
 
     const boxStyle = {
         background:
@@ -312,14 +325,74 @@ const NewEvent = ({ zapierUrl }) => {
                                     placeholder="Email"
                                     {...formik.getFieldProps("email")}
                                 />
+                                <button
+                                    type="button"
+                                    onClick={sendEmailOtp}
+                                    disabled={disableSendOtpBtn || sendEmailOtpLoading || !formik.values.email}
+                                    className="absolute top-2.5 bg-primary right-3 rounded-md cursor-pointer text-white py-1.5 px-2 text-xs disabled:opacity-50 disabled:cursor-not-allowed"
+                                >
+                                    {sendEmailOtpLoading ? "Sending..." : "Get Code"}
+                                </button>
                                 {formik.touched.email && formik.errors.email && (
                                     <p className="text-red-500 text-sm">{formik.errors.email}</p>
                                 )}
                             </div>
                         </div>
 
+                        {showEmailOtpVerify && (
+                            <div className="grid grid-cols-1 gap-2 mb-4">
+                                <p className="text-xs md:text-sm mb-1 text-gray-700">
+                                    A verification code has been sent to your email
+                                </p>
+                                <OtpInput
+                                    value={formik.values.otp}
+                                    onChange={(otp) => {
+                                        formik.setFieldValue("otp", otp);
+                                        if (otp?.length === 6) {
+                                            verifyEmailOtpCode(otp);
+                                        }
+                                    }}
+                                    numInputs={6}
+                                    containerStyle={{
+                                        justifyContent: "space-around",
+                                        alignItems: "center",
+                                        gap: "5px",
+                                    }}
+                                    renderInput={(props) => (
+                                        <input
+                                            {...props}
+                                            type="tel"
+                                            inputMode="numeric"
+                                            pattern="[0-9]*"
+                                        />
+                                    )}
+                                    isInputNum
+                                    inputStyle={{
+                                        fontSize: "16px",
+                                        borderRadius: "5px",
+                                        paddingBottom: "8px",
+                                        paddingTop: "8px",
+                                        width: "20%",
+                                        backgroundColor: "#f3f4f6",
+                                        color: "#000",
+                                        fontWeight: "700",
+                                        outlineColor: "#f9c617",
+                                        border:
+                                            formik.touched.otp && formik.errors.otp
+                                                ? "1px solid red"
+                                                : "1px solid gray",
+                                    }}
+                                />
+                                {formik.touched.otp && formik.errors.otp && (
+                                    <p className="text-red-500 text-sm mt-2">
+                                        {formik.errors.otp}
+                                    </p>
+                                )}
+                            </div>
+                        )}
+
                         <div className="grid grid-cols-1 mb-4">
-                            <p className="text-xs md:text-sm">Please enter your WhatsApp number for verification</p>
+                            <p className="text-xs md:text-sm">Phone number</p>
                             <div className="relative mb-2">
 
                                 <PhoneInput
@@ -334,105 +407,35 @@ const NewEvent = ({ zapierUrl }) => {
                                 {formik.touched.phone && formik.errors.phone && (
                                     <p className="text-red-500 text-sm">{formik.errors.phone}</p>
                                 )}
-                                <button
-                                    type="button"
-                                    onClick={sendPhoneVerificationCode}
-                                    disabled={
-                                        phoneOtpLoading ||
-                                        !formik.values.phone ||
-                                        !isValidPhoneNumber(formik.values.phone)
-                                    }
-                                    className="absolute top-2.5 bg-primary right-3 rounded-md cursor-pointer text-white py-1.5 px-2 text-xs disabled:opacity-50 disabled:cursor-not-allowed"
-                                >
-                                    {phoneOtpLoading ? "Sending..." : "Get Code"}
-                                </button>
                             </div>
-
-                            {showOtp && !state.verifed && (
-                                <div className="grid grid-cols-1 gap-2 mb-4">
-                                    <div />
-                                    <div className=" flex items-end gap-1">
-                                        <div>
-                                            <p className="text-xs md:text-sm mb-1">A verification code has been sent to your WhatsApp</p>
-                                            <OtpInput
-                                                value={formik.values.otp}
-                                                onChange={(otp) => {
-                                                    formik.setFieldValue("otp", otp);
-                                                    if (otp?.length == 6) {
-                                                        verifyOtpCode(otp);
-                                                    }
-                                                }}
-                                                numInputs={6}
-                                                containerStyle={{
-                                                    justifyContent: "space-around",
-                                                    alignItems: "center",
-                                                    gap: "5px",
-                                                }}
-                                                renderInput={(props) => (
-                                                    <input
-                                                        {...props}
-                                                        type="tel"
-                                                        inputMode="numeric"
-                                                        pattern="[0-9]*"
-                                                    />
-                                                )}
-                                                isInputNum
-                                                inputStyle={{
-                                                    fontSize: "16px",
-                                                    borderRadius: "5px",
-                                                    paddingBottom: "8px",
-                                                    paddingTop: "8px",
-                                                    width: "20%",
-                                                    backgroundColor: "#f3f4f6",
-                                                    color: "#000",
-                                                    fontWeight: "700",
-                                                    outlineColor: "#f9c617",
-                                                    border:
-                                                        formik.touched.otp && formik.errors.otp
-                                                            ? "1px solid red"
-                                                            : "1px solid gray",
-                                                }}
-                                            />
-                                            {formik.touched.otp && formik.errors.otp && (
-                                                <p className="text-red-500 text-sm mt-2">
-                                                    {formik.errors.otp}
-                                                </p>
-                                            )}
-                                        </div>
-                                      
-                                    </div>
-                                </div>
-                            )}
-
                         </div>
 
-                       
+
 
                         <div className="relative mb-4">
-    <GiWorld className="absolute top-4 left-3 text-gray-400 h-5 w-5" />
-    <select
-        name="country"
-        value={formik.values.country}
-        onChange={formik.handleChange}
-        onBlur={formik.handleBlur}
-        className={`w-full bg-white px-4 py-3 pl-9 border ${
-            formik.touched.country && formik.errors.country
-                ? "border-red-500"
-                : "border-gray-300"
-        } rounded-lg text-gray-700 focus:outline-none`}
-    >
-        <option value="">Select Country</option>
-        {countryList.map((item) => (
-            <option key={item.alpha_2_code} value={item.en_short_name}>
-                {item.en_short_name}
-            </option>
-        ))}
-    </select>
+                            <GiWorld className="absolute top-4 left-3 text-gray-400 h-5 w-5" />
+                            <select
+                                name="country"
+                                value={formik.values.country}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                className={`w-full bg-white px-4 py-3 pl-9 border ${formik.touched.country && formik.errors.country
+                                        ? "border-red-500"
+                                        : "border-gray-300"
+                                    } rounded-lg text-gray-700 focus:outline-none`}
+                            >
+                                <option value="">Select Country</option>
+                                {countryList.map((item) => (
+                                    <option key={item.alpha_2_code} value={item.en_short_name}>
+                                        {item.en_short_name}
+                                    </option>
+                                ))}
+                            </select>
 
-    {formik.touched.country && formik.errors.country && (
-        <p className="text-red-500 text-sm">{formik.errors.country}</p>
-    )}
-</div>
+                            {formik.touched.country && formik.errors.country && (
+                                <p className="text-red-500 text-sm">{formik.errors.country}</p>
+                            )}
+                        </div>
                         <div>
                             <label
                                 className={`block text-sm pb-2 ${formik.touched.terms && formik.errors.terms
@@ -452,16 +455,17 @@ const NewEvent = ({ zapierUrl }) => {
                                     id="terms"
                                     onChange={formik.handleChange}
                                     onBlur={formik.handleBlur}
+                                    checked={formik.values.terms}
                                     value="checked"
                                     className="h-5 w-5"
                                 />
                                 <p className="inline px-3 text-[10px] text-primary">
-                                   
 
 
 
 
-By submitting your details you are agreeing to be contacted according to our  <a
+
+                                    By submitting your details you are agreeing to be contacted according to our  <a
                                         className="text-secondary underline"
                                         href="https://gmgmarkets.co.uk/wp-content/uploads/2024/07/GLOBAL-MARKETS-GROUP-LIMITED_PRIVACY-POLICY.pdf"
                                     >Privacy Policy</a>, so that we can respond to your inquiries.

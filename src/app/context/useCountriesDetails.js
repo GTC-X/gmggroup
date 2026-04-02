@@ -176,13 +176,6 @@ export const countryList = [
         "nationality": "Plurinational State of Bolivia"
     },
     {
-        "num_code": "535",
-        "alpha_2_code": "BQ",
-        "alpha_3_code": "BES",
-        "en_short_name": "Bonaire, Sint Eustatius and Saba",
-        "nationality": "Bonaire"
-    },
-    {
         "num_code": "70",
         "alpha_2_code": "BA",
         "alpha_3_code": "BIH",
