@@ -75,7 +75,7 @@ export async function POST(req) {
 
 <tr>
   <td style="font-size:14px;color:#4D4D70;padding-bottom:10px;">
-    Welcome to GMG Group! You're one step away from getting started.
+    Welcome, You're one step away from getting started.
   </td>
 </tr>
 
@@ -129,9 +129,6 @@ Need Help?
             <tr>
               <td style="font-size:14px;color:#4D4D70;padding-bottom:30px;">
                 You’re the best, and soon, you’ll show the world you are!
-<br>
-                Your GTC Family
-
               </td>
             </tr>
 

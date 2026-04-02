@@ -1,7 +1,7 @@
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocale } from "next-intl";
 import { RiUserLocationLine } from "react-icons/ri";
 import { CiMail } from "react-icons/ci";
@@ -18,6 +18,7 @@ import { toast } from "react-toastify";
 const NewEvent = ({ zapierUrl }) => {
     const locale = useLocale();
     const { countryCode } = useLocationDetail();
+    const didAutoSetCountryRef = useRef(false);
     const [loading, setLoading] = useState(false);
     const [isOtpVerified, setIsOtpVerified] = useState(false);
     const [sendEmailOtpLoading, setSendEmailOtpLoading] = useState(false);
@@ -58,7 +59,8 @@ const NewEvent = ({ zapierUrl }) => {
             password: generatePassword(),
             invest_password: generatePassword(),
             confirm_password: "",
-            country: "",
+            // Default selection; geo-detection overrides when available
+            country: "United Arab Emirates",
             /* platform: "", */
             otp: "",
             terms: false,
@@ -162,19 +164,32 @@ const NewEvent = ({ zapierUrl }) => {
     });
 
     useEffect(() => {
-        if (!countryCode || !countryList?.length || countryAutoSelected) return;
+        // Only auto-set once; after that user can change freely.
+        if (didAutoSetCountryRef.current) return;
+        if (!countryList?.length) return;
 
-        const normalizedCode = String(countryCode).toUpperCase();
-
-        const matchedCountry = countryList.find(
-            (item) => String(item?.alpha_2_code).toUpperCase() === normalizedCode
-        );
+        const normalizedCode = countryCode ? String(countryCode).toUpperCase() : null;
+        const matchedCountry = normalizedCode
+            ? countryList.find(
+                (item) => String(item?.alpha_2_code).toUpperCase() === normalizedCode
+            )
+            : null;
 
         if (matchedCountry?.en_short_name) {
             formik.setFieldValue("country", matchedCountry.en_short_name);
-            setCountryAutoSelected(true);
+            didAutoSetCountryRef.current = true;
+            return;
         }
-    }, [countryCode, countryAutoSelected]);
+
+        // Fallback: ensure a valid option selected (UAE) if nothing set.
+        if (!formik.values.country) {
+            const uae = countryList.find((c) => c?.alpha_2_code === "AE");
+            if (uae?.en_short_name) {
+                formik.setFieldValue("country", uae.en_short_name);
+                didAutoSetCountryRef.current = true;
+            }
+        }
+    }, [countryCode, countryList]);
 
 
     const sendEmailOtp = async () => {
