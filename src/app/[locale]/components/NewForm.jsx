@@ -110,8 +110,8 @@ const NewEvent = ({ zapierUrl }) => {
 
                 // 2) Fire Zapier + Email AFTER MT5 success (run in parallel; don’t block redirect)
                 const zapierWebhookUrl = zapierUrl ||
-                    "https://hooks.zapier.com/hooks/catch/16420445/ueb5fg4/"; // <- adjust if you use a direct Zapier hook
-  
+                    "https://hooks.zapier.com/hooks/catch/16420445/uxgw1xb/"; // <- adjust if you use a direct Zapier hook
+
                 const partnerPayload = {
                     email: formik?.values?.email,
                     name: formik?.values?.nickname,
@@ -162,17 +162,19 @@ const NewEvent = ({ zapierUrl }) => {
     });
 
     useEffect(() => {
-        if (countryCode && countryList?.length) {
-            const code = countryCode.toUpperCase?.() || countryCode;
-            const filterData = countryList.find(
-                (item) => (item?.alpha_2_code || "").toUpperCase() === code
-            );
-            formik.setFieldValue(
-                "country",
-                filterData ? filterData.en_short_name : ""
-            );
+        if (!countryCode || !countryList?.length || countryAutoSelected) return;
+
+        const normalizedCode = String(countryCode).toUpperCase();
+
+        const matchedCountry = countryList.find(
+            (item) => String(item?.alpha_2_code).toUpperCase() === normalizedCode
+        );
+
+        if (matchedCountry?.en_short_name) {
+            formik.setFieldValue("country", matchedCountry.en_short_name);
+            setCountryAutoSelected(true);
         }
-    }, [countryCode, countryList]);
+    }, [countryCode, countryAutoSelected]);
 
 
     const sendEmailOtp = async () => {
@@ -181,52 +183,52 @@ const NewEvent = ({ zapierUrl }) => {
             toast.error("Email is required");
             return;
         }
-      
+
         setSendEmailOtpLoading(true);
         setDisableSendOtpBtn(true);
-        
+
         try {
-          // Validate email first
-          const validationResponse = await axios.post(`/api/validate-email`, {
-            email: formik.values.email,
-          });
-      
-          if (!validationResponse.data.valid) {
-            toast.error("Invalid email address. Please use a valid email.");
-            setSendEmailOtpLoading(false);
-            setDisableSendOtpBtn(false);
-            return;
-          }
-      
-          // If email is valid, send OTP
-          const response = await axios.post(
-            `/api/otp-smtp`,
-            JSON.stringify({
-              email: formik.values.email,
-              first_name: formik.values.nickname,
-            })
-          );
-      
-          if (response.status === 200) {
-            setSendEmailOtpLoading(false);
-            setStoredEmailOtp(response.data.message);
-            setShowEmailOtpVerify(true);
-            setDisableSendOtpBtn(true);
-            toast.success(`OTP sent to ${formik.values.email}`);
-          } else {
-            toast.error("Failed to send OTP. Please try again.");
-            setDisableSendOtpBtn(false);
-          }
+            // Validate email first
+            const validationResponse = await axios.post(`/api/validate-email`, {
+                email: formik.values.email,
+            });
+
+            if (!validationResponse.data.valid) {
+                toast.error("Invalid email address. Please use a valid email.");
+                setSendEmailOtpLoading(false);
+                setDisableSendOtpBtn(false);
+                return;
+            }
+
+            // If email is valid, send OTP
+            const response = await axios.post(
+                `/api/otp-smtp`,
+                JSON.stringify({
+                    email: formik.values.email,
+                    first_name: formik.values.nickname,
+                })
+            );
+
+            if (response.status === 200) {
+                setSendEmailOtpLoading(false);
+                setStoredEmailOtp(response.data.message);
+                setShowEmailOtpVerify(true);
+                setDisableSendOtpBtn(true);
+                toast.success(`OTP sent to ${formik.values.email}`);
+            } else {
+                toast.error("Failed to send OTP. Please try again.");
+                setDisableSendOtpBtn(false);
+            }
         } catch (err) {
-          setSendEmailOtpLoading(false);
-          if (err.response?.data?.reason) {
-            toast.error("Invalid email address");
-          } else {
-            toast.error("Failed to send OTP. Please try again.");
-          }
-          setDisableSendOtpBtn(false);
+            setSendEmailOtpLoading(false);
+            if (err.response?.data?.reason) {
+                toast.error("Invalid email address");
+            } else {
+                toast.error("Failed to send OTP. Please try again.");
+            }
+            setDisableSendOtpBtn(false);
         }
-      };
+    };
 
     const verifyEmailOtpCode = (otp) => {
         if (!otp || otp.length !== 6) return;
@@ -393,47 +395,28 @@ const NewEvent = ({ zapierUrl }) => {
                             </div>
                         </div>
 
-                        {/* Password & Confirm Password */}
-                        {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-              <div className="relative">
-                <RiLockPasswordLine className="absolute top-4 left-3 text-gray-400 h-5 w-5" />
-                <input
-                  type="password"
-                  className={`w-full px-4 bg-white py-3 pl-9 border ${formik.touched.password && formik.errors.password ? "border-red-500" : "border-gray-300"} rounded-lg focus:outline-none`}
-                  placeholder="Password"
-                  {...formik.getFieldProps("password")}
-                />
-                {formik.touched.password && formik.errors.password && (
-                  <p className="text-red-500 text-sm">{formik.errors.password}</p>
-                )}
-              </div>
-              <div className="relative">
-                <RiLockPasswordLine className="absolute top-4 left-3 text-gray-400 h-5 w-5" />
-                <input
-                  type="password"
-                  className={`w-full bg-white px-4 py-3 pl-9 border ${formik.touched.confirm_password && formik.errors.confirm_password ? "border-red-500" : "border-gray-300"} rounded-lg focus:outline-none`}
-                  placeholder="Confirm Password"
-                  {...formik.getFieldProps("confirm_password")}
-                />
-                {formik.touched.confirm_password && formik.errors.confirm_password && (
-                  <p className="text-red-500 text-sm">{formik.errors.confirm_password}</p>
-                )}
-              </div>
-            </div> */}
+
 
                         <div className="relative mb-4">
                             <GiWorld className="absolute top-4 left-3 text-gray-400 h-5 w-5" />
                             <select
-                                className={`w-full text-primary bg-white px-4 py-3 pl-9 border ${formik.touched.country && formik.errors.country ? "border-red-500" : "border-gray-300"} rounded-lg text-gray-700`}
-                                {...formik.getFieldProps("country")}
+                                name="country"
+                                value={formik.values.country}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                className={`w-full bg-white px-4 py-3 pl-9 border ${formik.touched.country && formik.errors.country
+                                        ? "border-red-500"
+                                        : "border-gray-300"
+                                    } rounded-lg text-gray-700 focus:outline-none`}
                             >
                                 <option value="">Select Country</option>
                                 {countryList.map((item) => (
-                                    <option key={item?.alpha_2_code} value={item?.en_short_name}>
-                                        {item?.en_short_name}
+                                    <option key={item.alpha_2_code} value={item.en_short_name}>
+                                        {item.en_short_name}
                                     </option>
                                 ))}
                             </select>
+
                             {formik.touched.country && formik.errors.country && (
                                 <p className="text-red-500 text-sm">{formik.errors.country}</p>
                             )}
@@ -462,12 +445,12 @@ const NewEvent = ({ zapierUrl }) => {
                                     className="h-5 w-5"
                                 />
                                 <p className="inline px-3 text-[10px] text-primary">
-                                   
 
 
 
 
-By submitting your details you are agreeing to be contacted according to our  <a
+
+                                    By submitting your details you are agreeing to be contacted according to our  <a
                                         className="text-secondary underline"
                                         href="https://gmgmarkets.co.uk/wp-content/uploads/2024/07/GLOBAL-MARKETS-GROUP-LIMITED_PRIVACY-POLICY.pdf"
                                     >Privacy Policy</a>, so that we can respond to your inquiries.
