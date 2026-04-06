@@ -22,7 +22,7 @@ export async function POST(req) {
     const subject = "GMG Group - Email Verification OTP";
 
     const html = `
-   <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -117,21 +117,20 @@ Need Help?
 
               </td>
             </tr>
-
+        <tr>
+              <td style="font-size:14px;color:#4D4D70;padding-bottom:30px;">
+                You’re the best, and soon, you’ll show the world you are!
+              </td>
+            </tr>
             <!-- Signoff -->
             <tr>
               <td style="font-size:16px;color:#4D4D70;padding-bottom:10px; font-weight: 600;">
-                <br>
             Best regards,<br>
 GMGMarkets Family
 
               </td>
             </tr>
-            <tr>
-              <td style="font-size:14px;color:#4D4D70;padding-bottom:30px;">
-                You’re the best, and soon, you’ll show the world you are!
-              </td>
-            </tr>
+    
 
              <tr>
   <td style="border-top: 2px solid #e0e0e0; padding: 15px 0;"></td>
