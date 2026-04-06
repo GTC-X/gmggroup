@@ -75,7 +75,7 @@ export async function POST(req) {
 
 <tr>
   <td style="font-size:14px;color:#4D4D70;padding-bottom:10px;">
-    Welcome, You're one step away from getting started.
+   Welcome to GMGMarkets. You are one step away from getting started.
   </td>
 </tr>
 
@@ -122,7 +122,8 @@ Need Help?
             <tr>
               <td style="font-size:16px;color:#4D4D70;padding-bottom:10px; font-weight: 600;">
                 <br>
-             Best Regard,
+            Best regards,<br>
+GMGMarkets Family
 
               </td>
             </tr>
