@@ -52,13 +52,7 @@ const generateEnglis = (data) => {
             </tr>
              <tr>
               <td style="font-size:14px;color:#4D4D70;padding-bottom:10px;">
-             You’re now ready to take on the world and prove that you really are the best trader on earth!
-              </td>
-            </tr>
-             <tr>
-              <td style="font-size:14px;color:#4D4D70;padding-bottom:10px;">
-            Your GTC Trading Account has been created and here’s how you access it.
-
+             A new query has been submitted through <a href="https://spreadbet.gmgmarkets.co.uk/" target="_blank">https://spreadbet.gmgmarkets.co.uk/</a>. Please find the details below:
               </td>
             </tr>
 
@@ -92,7 +86,7 @@ const generateEnglis = (data) => {
           <div style="background-color: #ffffff; padding: 10px 14px; border-radius: 8px;">${data?.country}</div>
         </td>
       </tr>
-   
+
     </table>
   </td>
 </tr>
@@ -100,7 +94,7 @@ const generateEnglis = (data) => {
 
 
           <tr>
-              <td style="font-size:16px;color:#4D4D70;padding-bottom:10px; font-weight: 600">
+              <td style="font-size:16px;color:#4D4D70;padding:20px 0px; font-weight: 600">
 
 
 Need Help?
@@ -115,20 +109,14 @@ Need Help?
 
             <!-- Signoff -->
             <tr>
-              <td style="font-size:16px;color:#4D4D70;padding-bottom:10px; font-weight: 600;">
+              <td style="font-size:16px;color:#4D4D70;padding-bottom:30px; font-weight: 600;">
                 <br>
-             Best Regard,
+            Best Regards,<br>
+GMGMarkets Family
 
               </td>
             </tr>
-            <tr>
-              <td style="font-size:14px;color:#4D4D70;padding-bottom:30px;">
-                You’re the best, and soon, you’ll show the world you are!
-<br>
-                Your GTC Family
 
-              </td>
-            </tr>
 
              <tr>
   <td style="border-top: 2px solid #e0e0e0; padding: 15px 0;"></td>
@@ -156,7 +144,7 @@ Need Help?
 <tr>
   <td style="font-size: 11px; color: #666; padding: 20px 0px; line-height: 1.5;">
   <strong>Risk Warning:CFDs and Spread Bets are complex instruments and come with a high risk of losing money rapidly due to leverage. 56.0% of retail investor accounts lose money when trading CFDs and Spread Bets with this provider. You should consider whether you understand how CFDs and Spread Bets work and whether you can afford to take the high risk of losing your money. There is a possibility to lose all your initial capital.</strong><br/><br/>
-    
+
     Global Markets Group Limited, a company registered in England & Wales under company number 09493910, is authorised and regulated by the Financial Conduct Authority with reference number 744501. Its registered address is Green Park House, 15 Stratton Street, London W1J 8LQ, United Kingdom You can contact us at info@gmgmarkets.co.uk or +44 203 865 3306.
     <br/><br/>
     <stong style="font-weight: 600p; color: #000;">HIGH RISK INVESTMENT WARNING:</stong> CFDs and Spreadbets are complex instruments and come with a high risk of losing money rapidly due to leverage. 56.0% of retail investor accounts lose money when trading in CFDs and Spreadbets with this provider. You should consider whether you understand how CFDs and Spreadbets work and whether you can afford to take the high risk of losing your money. CFDs and Spreadbets are provided by Global Markets Group Limited on an execution-only basis; we do not provide any advice and any written or verbal communication with us should not be considered as such.
