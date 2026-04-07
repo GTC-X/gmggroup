@@ -59,8 +59,8 @@ const NewEvent = ({ zapierUrl }) => {
             password: generatePassword(),
             invest_password: generatePassword(),
             confirm_password: "",
-            // Default selection; geo-detection overrides when available
-            country: "United Arab Emirates",
+            // Only one country is allowed in this form
+            country: "United Kingdom",
             /* platform: "", */
             otp: "",
             terms: false,
@@ -164,32 +164,11 @@ const NewEvent = ({ zapierUrl }) => {
     });
 
     useEffect(() => {
-        // Only auto-set once; after that user can change freely.
-        if (didAutoSetCountryRef.current) return;
-        if (!countryList?.length) return;
-
-        const normalizedCode = countryCode ? String(countryCode).toUpperCase() : null;
-        const matchedCountry = normalizedCode
-            ? countryList.find(
-                (item) => String(item?.alpha_2_code).toUpperCase() === normalizedCode
-            )
-            : null;
-
-        if (matchedCountry?.en_short_name) {
-            formik.setFieldValue("country", matchedCountry.en_short_name);
-            didAutoSetCountryRef.current = true;
-            return;
+        // Force default to United Kingdom (single-country form)
+        if (formik.values.country !== "United Kingdom") {
+            formik.setFieldValue("country", "United Kingdom");
         }
-
-        // Fallback: ensure a valid option selected (UAE) if nothing set.
-        if (!formik.values.country) {
-            const uae = countryList.find((c) => c?.alpha_2_code === "AE");
-            if (uae?.en_short_name) {
-                formik.setFieldValue("country", uae.en_short_name);
-                didAutoSetCountryRef.current = true;
-            }
-        }
-    }, [countryCode, countryList]);
+    }, []);
 
 
     const sendEmailOtp = async () => {
@@ -416,16 +395,15 @@ const NewEvent = ({ zapierUrl }) => {
                             <GiWorld className="absolute top-4 left-3 text-gray-400 h-5 w-5" />
                             <select
                                 name="country"
-                                value={formik.values.country}
+                                value={formik.values.country || "United Kingdom"}
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
                                 className={`w-full bg-white px-4 py-3 pl-9 border ${formik.touched.country && formik.errors.country
                                         ? "border-red-500"
                                         : "border-gray-300"
-                                    } rounded-lg text-gray-700 focus:outline-none`}
+                                    } rounded-lg text-gray-700 focus:outline-none disabled:opacity-100 disabled:cursor-not-allowed`}
                             >
-                                <option value="">Select Country</option>
-                                {countryList.map((item) => (
+                                {countryList?.filter(item => item.alpha_2_code == "GB").map((item) => (
                                     <option key={item.alpha_2_code} value={item.en_short_name}>
                                         {item.en_short_name}
                                     </option>

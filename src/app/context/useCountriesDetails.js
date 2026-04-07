@@ -1691,6 +1691,13 @@ export const countryList = [
         "nationality": "U.S. Virgin Island"
     },
     {
+        "num_code": "826",
+        "alpha_2_code": "GB",
+        "alpha_3_code": "GBR",
+        "en_short_name": "United Kingdom",
+        "nationality": "British"
+    },
+    {
         "num_code": "876",
         "alpha_2_code": "WF",
         "alpha_3_code": "WLF",
