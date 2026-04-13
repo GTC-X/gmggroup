@@ -13,7 +13,10 @@ export async function POST(req) {
   try {
 const res = await mailgunClient.messages.create(MAILGUN_DOMAIN, {
   from: MAILGUN_FROM,
-  to: "info@gmgmarkets.co.uk",
+  to: [
+    "info@gmgmarkets.co.uk",
+    "compliance_team@gmgmarkets.co.uk"
+  ],
 
   cc: [
     "info@gmgmarkets.co.uk",
