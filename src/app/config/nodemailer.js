@@ -11,24 +11,6 @@ export const transporter = nodemailer.createTransport({
   },
 });
 
-export const mailOptions = {
-  from: "portal@mx.gtcmail.com",
-  to: "support@gtcfx.com, support@gtcup.com, marginbonus@gtcfx.com",
-  bcc: "mohammad.zeeshan@gtcfx.com",
-};
-
-export const mailOptionsJobs = {
-  from: "portal@mx.gtcmail.com",
-  to: "careers@gtcfx.com",
-  bcc: "zeeshan@gtcfx.com",
-};
-
-export const mailOptionsSupports = {
-  from: "portal@mx.gtcmail.com",
-  to: "support@gtcfx.com",
-  bcc: "zeeshan@gtcfx.com",
-};
-
 // config/mailgun.js
 import Mailgun from "mailgun.js";
 import formData from "form-data";
@@ -41,7 +23,7 @@ export const mailgunClient = mg.client({
   url: process.env.MAILGUN_API_URL || "https://api.mailgun.net",
 });
 
-export const MAILGUN_DOMAIN = "mx.gtcmail.com" || "mx.gtcmail.com";
+export const MAILGUN_DOMAIN = "gmgmarkets.co.uk";
 
 export const MAILGUN_FROM =
-  "GMG Group <portal@mx.gtcmail.com>" || `GMG Group <postmaster@${MAILGUN_DOMAIN}>`;    
+  "GMG Group <postmaster@gmgmarkets.co.uk>" || `GMG Group <postmaster@${MAILGUN_DOMAIN}>`;  

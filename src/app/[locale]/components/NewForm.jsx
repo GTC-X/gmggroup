@@ -90,17 +90,6 @@ const NewEvent = ({ zapierUrl }) => {
             setLoading(true);
             try {
                 // Analytics (non-blocking)
-
-                const validationResponse = await axios.post(`/api/validate-email`, {
-                    email: formik.values.email,
-                });
-
-                if (!validationResponse.data.valid) {
-                    toast.error(
-                        "Invalid email address. Please use a valid email."
-                    );
-                    return;
-                }
                 try {
                     window.dataLayer = window.dataLayer || [];
                     window.dataLayer.push({ event: "formSubmission", formName: "Form" });
@@ -182,18 +171,6 @@ const NewEvent = ({ zapierUrl }) => {
         setDisableSendOtpBtn(true);
 
         try {
-            // Validate email first
-            const validationResponse = await axios.post(`/api/validate-email`, {
-                email: formik.values.email,
-            });
-
-            if (!validationResponse.data.valid) {
-                toast.error("Invalid email address. Please use a valid email.");
-                setSendEmailOtpLoading(false);
-                setDisableSendOtpBtn(false);
-                return;
-            }
-
             // If email is valid, send OTP
             const response = await axios.post(
                 `/api/otp-smtp`,
