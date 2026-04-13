@@ -26,4 +26,4 @@ export const mailgunClient = mg.client({
 export const MAILGUN_DOMAIN = "gmgmarkets.co.uk";
 
 export const MAILGUN_FROM =
-  "GMG Group <postmaster@gmgmarkets.co.uk>" || `GMG Group <postmaster@${MAILGUN_DOMAIN}>`;  
+  "GMG Group <info@gmgmarkets.co.uk>" || `GMG Group <postmaster@${MAILGUN_DOMAIN}>`;  
