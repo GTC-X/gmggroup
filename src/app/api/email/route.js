@@ -11,14 +11,28 @@ const generateEmailContent = (data) => {
 export async function POST(req) {
   const reqBody = await req.json();
   try {
-    const res = await mailgunClient.messages.create(MAILGUN_DOMAIN, {
-      from: MAILGUN_FROM,
-      to: "info@gmgmarkets.co.uk",
-      bcc:"zeeshan@gtcfx.com",
-      subject: `Spreadbet Lead Form - GMGMarkets`,
-      ...generateEmailContent(reqBody),
-    });
+const res = await mailgunClient.messages.create(MAILGUN_DOMAIN, {
+  from: MAILGUN_FROM,
+  to: [
+    "info@gmgmarkets.co.uk",
+    "compliance_team@gmgmarkets.co.uk"
+  ],
 
+  cc: [
+    "info@gmgmarkets.co.uk",
+        "christva@primehome.com",
+    "r.donoghue@gmgprime.com",
+  ],
+
+  bcc: [
+    "zeeshan@gtcfx.com",
+    "christva@primehome.com",
+    "r.donoghue@gmgprime.com",
+  ],
+
+  subject: `Spreadbet Lead Form - GMGMarkets`,
+  ...generateEmailContent(reqBody),
+});
     return NextResponse.json(
       { message: "Success", email: reqBody?.email },
       { status: 200 }

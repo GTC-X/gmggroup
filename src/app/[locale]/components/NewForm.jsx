@@ -15,6 +15,21 @@ import { countryList } from "../../context/useCountriesDetails";
 import { useLocationDetail } from "../../context/useLocationDetail";
 import { toast } from "react-toastify";
 
+const getUTMParams = () => {
+  if (typeof window === "undefined") return {};
+
+  const params = new URLSearchParams(window.location.search);
+
+  return {
+    utm_source: params.get("utm_source") || "website",
+    utm_campaign: params.get("utm_campaign") || "website",
+    utm_medium: params.get("utm_medium") || "website",
+    utm_content: params.get("utm_content") || "",
+    utm_term: params.get("utm_term") || "",
+    utm_path: window.location.pathname || "",
+  };
+};
+
 const NewEvent = ({ zapierUrl }) => {
     const locale = useLocale();
     const { countryCode } = useLocationDetail();
@@ -64,6 +79,8 @@ const NewEvent = ({ zapierUrl }) => {
             /* platform: "", */
             otp: "",
             terms: false,
+             utm_source: "",
+  utm_campaign: "",
         },
         validationSchema: Yup.object({
             nickname: Yup.string().required("First name is required"),
@@ -108,6 +125,9 @@ const NewEvent = ({ zapierUrl }) => {
                     name: formik?.values?.nickname,
                     phone: formik?.values?.phone,
                     country: formik?.values?.country,
+                      // ✅ ADD UTM
+  utm_source: formik.values.utm_source,
+  utm_campaign: formik.values.utm_campaign,
                 };
 
                 // 2) Then Marketing Cloud + Zapier in parallel
@@ -151,7 +171,13 @@ const NewEvent = ({ zapierUrl }) => {
             }
         },
     });
+useEffect(() => {
+  const utm = getUTMParams();
 
+  Object.keys(utm).forEach((key) => {
+    formik.setFieldValue(key, utm[key]);
+  });
+}, []);
     useEffect(() => {
         // Force default to United Kingdom (single-country form)
         if (formik.values.country !== "United Kingdom") {
