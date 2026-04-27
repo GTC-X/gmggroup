@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import Header from "../header";
-import NewEvent from "./NewForm";
 import Image from "next/image";
 const pad = (n) => String(Math.max(0, Math.floor(n))).padStart(2, "0");
 
@@ -72,7 +71,13 @@ export default function EventHero({ eventsData }) {
 
                     {/* Right form card - iFXExpo Dubai 2026 registration */}
                     <div className="md:col-span-4 lg:col-span-4 flex flex-col">
-                        <NewEvent />
+                        <iframe
+                            src="https://client.gmgmarkets.co.uk/registration/new/"
+                            title="GMG Markets Registration Form"
+                            className="w-full min-h-[900px] rounded-xl border border-white/20 bg-white"
+                            loading="lazy"
+                            referrerPolicy="strict-origin-when-cross-origin"
+                        />
                     </div>
                 </div>
 
