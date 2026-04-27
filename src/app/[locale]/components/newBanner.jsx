@@ -7,7 +7,7 @@ import Image from "next/image";
 const pad = (n) => String(Math.max(0, Math.floor(n))).padStart(2, "0");
 
 export default function EventHero({ eventsData }) {
-    const targetDate = new Date("2026-04-30T10:00:00").getTime();
+    const targetDate = new Date("2026-06-01T10:00:00").getTime();
 
     const [countdown, setCountdown] = useState([
         { value: "00", label: "Days" },
